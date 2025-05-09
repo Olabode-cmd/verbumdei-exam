@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Session - Verbum Dei Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/globals.css">
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r">
+                <!-- Sidebar Header -->
+                <div class="flex items-center justify-center h-16 px-4 bg-blue-500">
+                    <h1 class="text-xl font-bold text-white">Verbum Dei</h1>
+                </div>
+
+                <!-- Sidebar Content -->
+                <div class="flex flex-col flex-1 overflow-y-auto">
+                    <nav class="flex-1 px-2 py-4 space-y-1">
+                        <!-- Dashboard -->
+                        <a href="/admin/dashboard/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-home w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Dashboard
+                        </a>
+
+                        <!-- Quiz Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none" aria-controls="quiz-dropdown" aria-expanded="false">
+                                <i class="fas fa-book w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                                <span class="flex-1 text-left">Quiz</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="quiz-dropdown">
+                                <a href="/admin/quiz/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Create Quiz
+                                </a>
+                                <a href="/admin/quiz/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Quizzes
+                                </a>
+                                <a href="/admin/quiz/questions/upload.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Upload Questions
+                                </a>
+                                <a href="/admin/quiz/questions/index.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Questions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Sessions Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md group focus:outline-none" aria-controls="sessions-dropdown" aria-expanded="false">
+                                <i class="fas fa-clock w-6 h-6 mr-3 text-blue-500"></i>
+                                <span class="flex-1 text-left">Sessions</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="sessions-dropdown">
+                                <a href="/admin/sessions/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md">
+                                    Create Session
+                                </a>
+                                <a href="/admin/sessions/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Sessions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <a href="/admin/results/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-chart-bar w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Results
+                        </a>
+
+                        <!-- Logout -->
+                        <button id="logoutBtn" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-sign-out-alt w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Logout
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <div class="bg-white shadow">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16 items-center">
+                        <div class="flex items-center">
+                            <button type="button" class="md:hidden px-4 text-gray-500 focus:outline-none" id="sidebarToggle">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                            <h1 class="text-2xl font-bold text-gray-900">Create Session</h1>
+                        </div>
+                        <div>
+                            <a href="/admin/sessions/list.html" 
+                               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600">
+                                <i class="fas fa-list mr-2"></i>
+                                View Sessions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Session Form -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+                <div class="max-w-3xl mx-auto">
+                    <div class="bg-white shadow-md rounded-lg p-6">
+                        <form id="createSessionForm">
+                            <!-- Quiz Selection -->
+                            <div class="mb-6">
+                                <label for="quizSelect" class="block text-sm font-medium text-gray-700">Select Quiz</label>
+                                <select id="quizSelect" name="quizId" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Choose a quiz</option>
+                                </select>
+                            </div>
+
+                            <!-- Session Name -->
+                            <div class="mb-6">
+                                <label for="sessionName" class="block text-sm font-medium text-gray-700">Session Name</label>
+                                <input type="text" id="sessionName" name="name" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    placeholder="Enter session name">
+                            </div>
+
+                            <!-- Date and Time -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+                                    <input type="date" id="startDate" name="startDate" required
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label for="startTime" class="block text-sm font-medium text-gray-700">Start Time</label>
+                                    <input type="time" id="startTime" name="startTime" required
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                </div>
+                            </div>
+
+                            <!-- Duration -->
+                            <div class="mb-6">
+                                <label for="duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+                                <input type="number" id="duration" name="duration" required min="1"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    placeholder="Enter duration in minutes">
+                            </div>
+
+                            <!-- Access Code -->
+                            <div class="mb-6">
+                                <label for="accessCode" class="block text-sm font-medium text-gray-700">Access Code</label>
+                                <div class="mt-1 flex rounded-md shadow-sm">
+                                    <input type="text" id="accessCode" name="accessCode" required
+                                        class="flex-1 rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                                        placeholder="Enter access code">
+                                    <button type="button" id="generateCode"
+                                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 hover:bg-gray-100">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="mt-6">
+                                <button type="submit"
+                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Create Session
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Authentication and Sidebar Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/admin/login.html';
+                return;
+            }
+
+            // Sidebar toggle for mobile
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.md\\:flex');
+            
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Logout handler
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('adminToken');
+                window.location.href = '/admin/login.html';
+            });
+
+            // Dropdown toggles
+            document.querySelectorAll('[aria-controls]').forEach(button => {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
+
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+
+            // Fetch quizzes for the select dropdown
+            fetchQuizzes();
+
+            // Generate access code button
+            document.getElementById('generateCode').addEventListener('click', generateAccessCode);
+
+            // Form submission
+            document.getElementById('createSessionForm').addEventListener('submit', handleSubmit);
+        });
+
+        async function fetchQuizzes() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/quizzes', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const quizzes = await response.json();
+                    const select = document.getElementById('quizSelect');
+                    
+                    quizzes.forEach(quiz => {
+                        const option = document.createElement('option');
+                        option.value = quiz.id;
+                        option.textContent = quiz.title;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching quizzes:', error);
+            }
+        }
+
+        function generateAccessCode() {
+            const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+            document.getElementById('accessCode').value = code;
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const sessionData = {
+                quizId: formData.get('quizId'),
+                name: formData.get('name'),
+                startDate: formData.get('startDate'),
+                startTime: formData.get('startTime'),
+                duration: parseInt(formData.get('duration')),
+                accessCode: formData.get('accessCode')
+            };
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/sessions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(sessionData)
+                });
+
+                if (response.ok) {
+                    window.location.href = '/admin/sessions/list.html';
+                } else {
+                    throw new Error('Failed to create session');
+                }
+            } catch (error) {
+                alert('Error creating session: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html> 

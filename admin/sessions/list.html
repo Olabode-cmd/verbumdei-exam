@@ -1,0 +1,444 @@
+ !DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Sessions - Verbum Dei Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/globals.css">
+</head>
+
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r">
+                <!-- Sidebar Header -->
+                <div class="flex items-center justify-center h-16 px-4 bg-blue-500">
+                    <h1 class="text-xl font-bold text-white">Verbum Dei</h1>
+                </div>
+
+                <!-- Sidebar Content -->
+                <div class="flex flex-col flex-1 overflow-y-auto">
+                    <nav class="flex-1 px-2 py-4 space-y-1">
+                        <!-- Dashboard -->
+                        <a href="/admin/dashboard/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-home w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Dashboard
+                        </a>
+
+                        <!-- Quiz Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none" aria-controls="quiz-dropdown" aria-expanded="false">
+                                <i class="fas fa-book w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                                <span class="flex-1 text-left">Quiz</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="quiz-dropdown">
+                                <a href="/admin/quiz/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Create Quiz
+                                </a>
+                                <a href="/admin/quiz/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Quizzes
+                                </a>
+                                <a href="/admin/quiz/questions/upload.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Upload Questions
+                                </a>
+                                <a href="/admin/quiz/questions/index.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Questions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Sessions Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md group focus:outline-none" aria-controls="sessions-dropdown" aria-expanded="false">
+                                <i class="fas fa-clock w-6 h-6 mr-3 text-blue-500"></i>
+                                <span class="flex-1 text-left">Sessions</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="sessions-dropdown">
+                                <a href="/admin/sessions/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Create Session
+                                </a>
+                                <a href="/admin/sessions/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md">
+                                    View Sessions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <a href="/admin/results/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-chart-bar w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Results
+                        </a>
+
+                        <!-- Logout -->
+                        <button id="logoutBtn"
+                            class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-sign-out-alt w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Logout
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <div class="bg-white shadow">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16 items-center">
+                        <div class="flex items-center">
+                            <button type="button" class="md:hidden px-4 text-gray-500 focus:outline-none"
+                                id="sidebarToggle">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                            <h1 class="text-2xl font-bold text-gray-900">View Sessions</h1>
+                        </div>
+                        <div>
+                            <a href="/admin/sessions/create"
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600">
+                                <i class="fas fa-plus mr-2"></i>
+                                Create Session
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white border-b">
+                <div class="px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <div class="w-64">
+                            <select id="quizFilter"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">All Quizzes</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <input type="text" placeholder="Search sessions..." id="searchInput"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div class="w-40">
+                            <select id="statusFilter"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">All Status</option>
+                                <option value="upcoming">Upcoming</option>
+                                <option value="ongoing">Ongoing</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessions List -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                        <ul class="divide-y divide-gray-200" id="sessionList">
+                            <!-- Sessions will be dynamically inserted here -->
+                        </ul>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div
+                        class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-4 rounded-md shadow">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <button
+                                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <button
+                                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span class="font-medium" id="startRange">1</span> to <span
+                                        class="font-medium" id="endRange">10</span> of <span class="font-medium"
+                                        id="totalItems">20</span> results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                    aria-label="Pagination" id="pagination">
+                                    <!-- Pagination buttons will be dynamically inserted here -->
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Session Item Template -->
+    <template id="sessionItemTemplate">
+        <li class="session-item">
+            <div class="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 min-w-0 pr-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-blue-500 truncate session-name"></h3>
+                            <span
+                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full session-status"></span>
+                        </div>
+                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <i class="fas fa-book flex-shrink-0 mr-1.5"></i>
+                            <span class="truncate quiz-title"></span>
+                            <i class="fas fa-calendar flex-shrink-0 ml-4 mr-1.5"></i>
+                            <span class="truncate session-date"></span>
+                            <i class="fas fa-clock flex-shrink-0 ml-4 mr-1.5"></i>
+                            <span class="truncate session-time"></span>
+                            <i class="fas fa-hourglass-half flex-shrink-0 ml-4 mr-1.5"></i>
+                            <span class="truncate session-duration"></span>
+                        </div>
+                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <i class="fas fa-key flex-shrink-0 mr-1.5"></i>
+                            <span class="truncate session-code"></span>
+                            <i class="fas fa-users flex-shrink-0 ml-4 mr-1.5"></i>
+                            <span class="truncate participants-count"></span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="edit-session px-3 py-1 text-sm text-blue-500 hover:bg-blue-50 rounded-md">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="view-results px-3 py-1 text-sm text-green-500 hover:bg-green-50 rounded-md">
+                            <i class="fas fa-chart-bar"></i>
+                        </button>
+                        <button class="delete-session px-3 py-1 text-sm text-red-500 hover:bg-red-50 rounded-md">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </template>
+
+    <script>
+        // Sample sessions data - Replace with actual API call
+        const sessions = [
+            {
+                id: 1,
+                name: "Math Quiz - Grade 7",
+                quizTitle: "Algebra Basics",
+                startDate: "2024-03-15",
+                startTime: "09:00",
+                duration: 60,
+                accessCode: "ABC123",
+                status: "upcoming",
+                participantsCount: 25
+            },
+            {
+                id: 2,
+                name: "Science Quiz - Grade 8",
+                quizTitle: "Cell Biology",
+                startDate: "2024-03-14",
+                startTime: "10:30",
+                duration: 45,
+                accessCode: "XYZ789",
+                status: "completed",
+                participantsCount: 30
+            }
+        ];
+
+        function renderSessions(sessions) {
+            const sessionList = document.getElementById('sessionList');
+            const template = document.getElementById('sessionItemTemplate');
+            sessionList.innerHTML = '';
+
+            sessions.forEach(session => {
+                const clone = template.content.cloneNode(true);
+
+                clone.querySelector('.session-name').textContent = session.name;
+                clone.querySelector('.quiz-title').textContent = session.quizTitle;
+                clone.querySelector('.session-date').textContent = new Date(session.startDate).toLocaleDateString();
+                clone.querySelector('.session-time').textContent = session.startTime;
+                clone.querySelector('.session-duration').textContent = `${session.duration} mins`;
+                clone.querySelector('.session-code').textContent = `Code: ${session.accessCode}`;
+                clone.querySelector('.participants-count').textContent = `${session.participantsCount} participants`;
+
+                const statusElement = clone.querySelector('.session-status');
+                statusElement.textContent = session.status;
+                switch (session.status) {
+                    case 'upcoming':
+                        statusElement.classList.add('bg-yellow-100', 'text-yellow-800');
+                        break;
+                    case 'ongoing':
+                        statusElement.classList.add('bg-green-100', 'text-green-800');
+                        break;
+                    case 'completed':
+                        statusElement.classList.add('bg-gray-100', 'text-gray-800');
+                        break;
+                }
+
+                // Add event listeners
+                clone.querySelector('.edit-session').addEventListener('click', () => editSession(session.id));
+                clone.querySelector('.view-results').addEventListener('click', () => viewResults(session.id));
+                clone.querySelector('.delete-session').addEventListener('click', () => deleteSession(session.id));
+
+                sessionList.appendChild(clone);
+            });
+        }
+
+        function editSession(sessionId) {
+            window.location.href = `/admin/sessions/edit?id=${sessionId}`;
+        }
+
+        function viewResults(sessionId) {
+            window.location.href = `/admin/results?sessionId=${sessionId}`;
+        }
+
+        async function deleteSession(sessionId) {
+            if (confirm('Are you sure you want to delete this session?')) {
+                try {
+                    const token = localStorage.getItem('adminToken');
+                    const response = await fetch(`/api/sessions/${sessionId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Refresh the sessions list
+                        fetchSessions();
+                    } else {
+                        throw new Error('Failed to delete session');
+                    }
+                } catch (error) {
+                    alert('Error deleting session: ' + error.message);
+                }
+            }
+        }
+
+        async function fetchSessions() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/sessions', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const sessions = await response.json();
+                    renderSessions(sessions);
+                    updatePagination(sessions.length);
+                } else {
+                    throw new Error('Failed to fetch sessions');
+                }
+            } catch (error) {
+                console.error('Error fetching sessions:', error);
+                // For now, render sample data
+                renderSessions(sessions);
+                updatePagination(sessions.length);
+            }
+        }
+
+        function updatePagination(totalItems) {
+            const itemsPerPage = 10;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Previous button
+            const prevButton = document.createElement('button');
+            prevButton.className = 'relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50';
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            pagination.appendChild(prevButton);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.className = `relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${i === 1 ? 'text-blue-500 bg-blue-50' : 'text-gray-700'} hover:bg-gray-50`;
+                pageButton.textContent = i;
+                pagination.appendChild(pageButton);
+            }
+
+            // Next button
+            const nextButton = document.createElement('button');
+            nextButton.className = 'relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50';
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            pagination.appendChild(nextButton);
+
+            // Update range text
+            document.getElementById('startRange').textContent = '1';
+            document.getElementById('endRange').textContent = Math.min(itemsPerPage, totalItems);
+            document.getElementById('totalItems').textContent = totalItems;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/admin/login.html';
+                return;
+            }
+
+            // Sidebar toggle for mobile
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.md\\:flex');
+
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Logout handler
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('adminToken');
+                window.location.href = '/admin/login.html';
+            });
+
+            // Dropdown toggles
+            document.querySelectorAll('[aria-controls]').forEach(button => {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
+
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+
+            // Fetch sessions
+            fetchSessions();
+
+            // Add filter event listeners
+            document.getElementById('searchInput').addEventListener('input', filterSessions);
+            document.getElementById('quizFilter').addEventListener('change', filterSessions);
+            document.getElementById('statusFilter').addEventListener('change', filterSessions);
+        });
+
+        function filterSessions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const quizFilter = document.getElementById('quizFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const filteredSessions = sessions.filter(session => {
+                const matchesSearch = session.name.toLowerCase().includes(searchTerm) ||
+                    session.quizTitle.toLowerCase().includes(searchTerm);
+                const matchesQuiz = !quizFilter || session.quizTitle === quizFilter;
+                const matchesStatus = !statusFilter || session.status === statusFilter;
+                return matchesSearch && matchesQuiz && matchesStatus;
+            });
+
+            renderSessions(filteredSessions);
+            updatePagination(filteredSessions.length);
+        }
+    </script>
+</body>
+
+</html>
