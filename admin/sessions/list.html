@@ -378,33 +378,31 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simple token check
             const token = localStorage.getItem('adminToken');
             if (!token) {
-                window.location.href = '/admin/login.html';
+                window.location.href = '../login.html';
                 return;
             }
 
-            // Sidebar toggle for mobile
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.md\\:flex');
-
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
+            // Fix navigation URLs
+            document.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('/admin')) {
+                    link.href = href.replace('/admin', '..');
+                }
             });
 
-            // Logout handler
-            const logoutBtn = document.getElementById('logoutBtn');
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('adminToken');
-                window.location.href = '/admin/login.html';
-            });
-
-            // Dropdown toggles
+            // Initialize dropdowns
             document.querySelectorAll('[aria-controls]').forEach(button => {
                 const dropdownId = button.getAttribute('aria-controls');
                 const dropdown = document.getElementById(dropdownId);
+                
+                // Show sessions dropdown by default
+                if (dropdownId === 'sessions-dropdown') {
+                    dropdown.classList.remove('hidden');
+                }
 
                 button.addEventListener('click', () => {
                     const isExpanded = button.getAttribute('aria-expanded') === 'true';
@@ -413,8 +411,23 @@
                 });
             });
 
-            // Fetch sessions
-            fetchSessions();
+            // Sidebar toggle for mobile
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.md\\:flex');
+            
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+            });
+
+            // Logout handler
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('adminToken');
+                window.location.href = '../../login.html';
+            });
+
+            // Initialize sessions
+            renderSessions(sessions);
+            updatePagination(sessions.length);
 
             // Add filter event listeners
             document.getElementById('searchInput').addEventListener('input', filterSessions);

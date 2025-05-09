@@ -346,8 +346,66 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchQuestions();
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            const token = localStorage.getItem('adminToken');
+            
+            // Only redirect if there's no token at all
+            if (!token) {
+                window.location.href = '../../login.html';
+                return;
+            }
+
+            try {
+                // Verify token by making a request
+                const response = await fetch('/api/admin/verify', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Invalid token');
+                }
+            } catch (error) {
+                console.error('Auth error:', error);
+                // Don't redirect on failed verification
+            }
+
+            // Fix navigation URLs
+            document.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('/admin')) {
+                    link.href = href.replace('/admin', '../..');
+                }
+            });
+
+            // Initialize dropdowns
+            document.querySelectorAll('[aria-controls]').forEach(button => {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
+                
+                // Show dropdowns by default
+                if (dropdownId === 'quiz-dropdown') {
+                    dropdown.classList.remove('hidden');
+                }
+
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+
+            // Logout handler
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                localStorage.removeItem('adminToken');
+                window.location.href = '../../login.html';
+            });
+
+            // Initialize questions
+            renderQuestions(questions);
+            updatePagination(questions.length);
 
             // Add filter event listeners
             document.getElementById('searchInput').addEventListener('input', filterQuestions);
@@ -370,51 +428,6 @@
             renderQuestions(filteredQuestions);
             updatePagination(filteredQuestions.length);
         }
-
-        // Authentication and Sidebar Toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/admin/login.html';
-                return;
-            }
-
-            // Sidebar toggle for mobile
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.md\\:flex');
-            
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
-            });
-
-            // Logout handler
-            const logoutBtn = document.getElementById('logoutBtn');
-            logoutBtn.addEventListener('click', () => {
-                localStorage.removeItem('token');
-                window.location.href = '/admin/login.html';
-            });
-
-            // Quiz dropdown toggle
-            const quizDropdownBtn = document.querySelector('[aria-controls="quiz-dropdown"]');
-            const quizDropdown = document.getElementById('quiz-dropdown');
-            
-            quizDropdownBtn.addEventListener('click', () => {
-                const isExpanded = quizDropdownBtn.getAttribute('aria-expanded') === 'true';
-                quizDropdownBtn.setAttribute('aria-expanded', !isExpanded);
-                quizDropdown.classList.toggle('hidden');
-            });
-
-            // Sessions dropdown toggle
-            const sessionsDropdownBtn = document.querySelector('[aria-controls="sessions-dropdown"]');
-            const sessionsDropdown = document.getElementById('sessions-dropdown');
-            
-            sessionsDropdownBtn.addEventListener('click', () => {
-                const isExpanded = sessionsDropdownBtn.getAttribute('aria-expanded') === 'true';
-                sessionsDropdownBtn.setAttribute('aria-expanded', !isExpanded);
-                sessionsDropdown.classList.toggle('hidden');
-            });
-        });
     </script>
 </body>
 </html> 

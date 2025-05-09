@@ -179,14 +179,38 @@
     </div>
 
     <script>
-        // Authentication and Sidebar Toggle
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication
+            // Simple token check
             const token = localStorage.getItem('adminToken');
             if (!token) {
-                window.location.href = '/admin/login.html';
+                window.location.href = '../login.html';
                 return;
             }
+
+            // Fix navigation URLs
+            document.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('/admin')) {
+                    link.href = href.replace('/admin', '..');
+                }
+            });
+
+            // Initialize dropdowns
+            document.querySelectorAll('[aria-controls]').forEach(button => {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
+                
+                // Show sessions dropdown by default
+                if (dropdownId === 'sessions-dropdown') {
+                    dropdown.classList.remove('hidden');
+                }
+
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdown.classList.toggle('hidden');
+                });
+            });
 
             // Sidebar toggle for mobile
             const sidebarToggle = document.getElementById('sidebarToggle');
@@ -197,22 +221,10 @@
             });
 
             // Logout handler
-            const logoutBtn = document.getElementById('logoutBtn');
-            logoutBtn.addEventListener('click', () => {
+            document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.removeItem('adminToken');
-                window.location.href = '/admin/login.html';
-            });
-
-            // Dropdown toggles
-            document.querySelectorAll('[aria-controls]').forEach(button => {
-                const dropdownId = button.getAttribute('aria-controls');
-                const dropdown = document.getElementById(dropdownId);
-
-                button.addEventListener('click', () => {
-                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                    button.setAttribute('aria-expanded', !isExpanded);
-                    dropdown.classList.toggle('hidden');
-                });
+                localStorage.removeItem('adminUser');
+                window.location.href = '../login.html';
             });
 
             // Fetch quizzes for the select dropdown
