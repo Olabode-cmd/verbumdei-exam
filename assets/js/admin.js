@@ -4,12 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = adminLoginForm.querySelector('button[type="submit"]');
     const submitButtonText = submitButton.innerHTML;
 
-    // Check if already logged in
+    // Initialize form without automatic redirection for logged-in users
     const userData = getUserSession();
-    if (userData && userData.token) {
-        handleAuthenticatedUser(userData);
-        return;
-    }
 
     adminLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -27,8 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 password: password
             });
 
-            // Store user data
+            // Store user data and token
             storeUserSession(response);
+            localStorage.setItem('adminToken', response.token);
             
             // Show success message
             showToast(`Welcome back, ${response.first_name}!`, 'success');
@@ -67,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function handleAuthenticatedUser(userData) {
     if (isAuthorizedRole(userData.role)) {
         // Redirect to dashboard if role is authorized
-        window.location.href = '/admin/dashboard/';
+        window.location.href = 'dashboard/index.html';
     } else {
         // Redirect to unauthorized page
-        window.location.href = '/admin/unauthorized.html';
+        window.location.href = 'unauthorized.html';
     }
-} 
+}

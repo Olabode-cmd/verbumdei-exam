@@ -84,4 +84,70 @@ function clearUserSession() {
 function getAuthHeader() {
     const token = localStorage.getItem('adminToken');
     return token ? { 'Authorization': `Bearer ${token}` } : {};
-} 
+}
+
+// Toast notification function
+function showToast(message, type = 'info') {
+    // Create toast container if it doesn't exist
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.className = 'fixed top-4 right-4 z-50';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `mb-3 p-4 rounded-md shadow-lg flex items-center transition-all transform translate-x-0 max-w-xs`;
+    
+    // Set background color based on type
+    switch(type) {
+        case 'success':
+            toast.classList.add('bg-green-500', 'text-white');
+            break;
+        case 'error':
+            toast.classList.add('bg-red-500', 'text-white');
+            break;
+        case 'warning':
+            toast.classList.add('bg-yellow-500', 'text-white');
+            break;
+        default:
+            toast.classList.add('bg-blue-500', 'text-white');
+    }
+    
+    // Add icon based on type
+    let icon = '';
+    switch(type) {
+        case 'success':
+            icon = '<i class="fas fa-check-circle mr-2"></i>';
+            break;
+        case 'error':
+            icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
+            break;
+        case 'warning':
+            icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
+            break;
+        default:
+            icon = '<i class="fas fa-info-circle mr-2"></i>';
+    }
+    
+    // Set toast content
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+    
+    // Add toast to container
+    toastContainer.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.add('opacity-100');
+    }, 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => {
+            toastContainer.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
