@@ -109,69 +109,41 @@
 
             <!-- Create Session Form -->
             <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
-                <div class="max-w-3xl mx-auto">
-                    <div class="bg-white shadow-md rounded-lg p-6">
-                        <form id="createSessionForm">
-                            <!-- Quiz Selection -->
-                            <div class="mb-6">
-                                <label for="quizSelect" class="block text-sm font-medium text-gray-700">Select Quiz</label>
-                                <select id="quizSelect" name="quizId" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    <option value="">Choose a quiz</option>
+                <div class="max-w-xl mx-auto">
+                    <div class="bg-white shadow-lg rounded-lg p-0">
+                        <div class="bg-blue-600 rounded-t-lg py-4 text-center">
+                            <h2 class="text-2xl font-bold text-white">Create New Session</h2>
+                        </div>
+                        <form id="createSessionForm" class="p-8 space-y-6">
+                            <div>
+                                <label for="quizSelect" class="block text-sm font-medium text-gray-700 mb-2">Quiz Name</label>
+                                <select id="quizSelect" name="quiz" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
+                                    <option value="">Select Quiz</option>
                                 </select>
                             </div>
-
-                            <!-- Session Name -->
-                            <div class="mb-6">
-                                <label for="sessionName" class="block text-sm font-medium text-gray-700">Session Name</label>
-                                <input type="text" id="sessionName" name="name" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    placeholder="Enter session name">
+                            <div>
+                                <label for="numberOfQuestion" class="block text-sm font-medium text-gray-700 mb-2">Number of Question</label>
+                                <input type="number" id="numberOfQuestion" name="number_of_question" required min="1" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150" placeholder="Enter number of questions">
                             </div>
-
-                            <!-- Date and Time -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
-                                    <input type="date" id="startDate" name="startDate" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                </div>
-                                <div>
-                                    <label for="startTime" class="block text-sm font-medium text-gray-700">Start Time</label>
-                                    <input type="time" id="startTime" name="startTime" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                </div>
+                            <div>
+                                <label for="startTime" class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                                <input type="datetime-local" id="startTime" name="start_time" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
                             </div>
-
-                            <!-- Duration -->
-                            <div class="mb-6">
-                                <label for="duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
-                                <input type="number" id="duration" name="duration" required min="1"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                    placeholder="Enter duration in minutes">
+                            <div>
+                                <label for="endTime" class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                                <input type="datetime-local" id="endTime" name="end_time" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
                             </div>
-
-                            <!-- Access Code -->
-                            <div class="mb-6">
-                                <label for="accessCode" class="block text-sm font-medium text-gray-700">Access Code</label>
-                                <div class="mt-1 flex rounded-md shadow-sm">
-                                    <input type="text" id="accessCode" name="accessCode" required
-                                        class="flex-1 rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                                        placeholder="Enter access code">
-                                    <button type="button" id="generateCode"
-                                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 hover:bg-gray-100">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
-                                </div>
+                            <div>
+                                <label for="studentSearch" class="block text-sm font-medium text-gray-700 mb-2">Search Candidate by Registration Number</label>
+                                <input type="text" id="studentSearch" autocomplete="off" placeholder="Enter registration number" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
+                                <ul id="studentSuggestions" class="bg-white border border-gray-200 rounded-lg mt-1 max-h-40 overflow-y-auto hidden z-10"></ul>
                             </div>
-
-                            <!-- Submit Button -->
-                            <div class="mt-6">
-                                <button type="submit"
-                                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Create Session
-                                </button>
+                            <div id="selectedStudents" class="flex flex-wrap gap-2 mt-2"></div>
+                            <div>
+                                <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 font-semibold">Create</button>
                             </div>
+                            <div id="sessionError" class="mt-4 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 text-sm hidden"></div>
+                            <div id="sessionSuccess" class="mt-4 px-4 py-3 rounded-lg bg-green-50 text-green-600 text-sm hidden"></div>
                         </form>
                     </div>
                 </div>
@@ -179,121 +151,178 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fix navigation URLs
-            document.querySelectorAll('a').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href.startsWith('/admin')) {
-                    link.href = href.replace('/admin', '..');
+    <script type="module">
+    import { fetchQuizzes } from '../../assets/js/quiz.js';
+    import { fetchStudents } from '../../assets/js/students.js';
+
+    const quizSelect = document.getElementById('quizSelect');
+    const studentSearch = document.getElementById('studentSearch');
+    const studentSuggestions = document.getElementById('studentSuggestions');
+    const selectedStudentsDiv = document.getElementById('selectedStudents');
+    const createSessionForm = document.getElementById('createSessionForm');
+    const sessionError = document.getElementById('sessionError');
+    const sessionSuccess = document.getElementById('sessionSuccess');
+
+    let allStudents = [];
+    let selectedStudents = [];
+
+    // Fetch quizzes for select
+    async function populateQuizSelect() {
+        try {
+            const quizzes = await fetchQuizzes();
+            quizSelect.innerHTML = '<option value="">Select Quiz</option>';
+            quizzes.forEach(quiz => {
+                const option = document.createElement('option');
+                option.value = quiz.name || quiz.title;
+                option.textContent = quiz.name || quiz.title;
+                quizSelect.appendChild(option);
+            });
+        } catch (e) { /* Optionally show error */ }
+    }
+    populateQuizSelect();
+
+    // Fetch all students
+    async function loadStudents() {
+        try {
+            allStudents = await fetchStudents();
+        } catch (e) { /* Optionally show error */ }
+    }
+    loadStudents();
+
+    // Search and suggest students
+    studentSearch.addEventListener('input', function() {
+        const query = this.value.trim().toLowerCase();
+        studentSuggestions.innerHTML = '';
+        if (!query) {
+            studentSuggestions.classList.add('hidden');
+            return;
+        }
+        const matches = allStudents.filter(s =>
+            s.registration_number && s.registration_number.toLowerCase().includes(query)
+        ).slice(0, 10);
+        if (matches.length === 0) {
+            studentSuggestions.classList.add('hidden');
+            return;
+        }
+        matches.forEach(student => {
+            const li = document.createElement('li');
+            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-50';
+            li.textContent = `${student.first_name} ${student.last_name} - ${student.registration_number}`;
+            li.addEventListener('click', () => {
+                if (!selectedStudents.includes(student.registration_number)) {
+                    selectedStudents.push(student.registration_number);
+                    renderSelectedStudents();
                 }
+                studentSearch.value = '';
+                studentSuggestions.classList.add('hidden');
             });
-
-            // Initialize dropdowns
-            document.querySelectorAll('[aria-controls]').forEach(button => {
-                const dropdownId = button.getAttribute('aria-controls');
-                const dropdown = document.getElementById(dropdownId);
-                
-                // Show sessions dropdown by default
-                if (dropdownId === 'sessions-dropdown') {
-                    dropdown.classList.remove('hidden');
-                }
-
-                button.addEventListener('click', () => {
-                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                    button.setAttribute('aria-expanded', !isExpanded);
-                    dropdown.classList.toggle('hidden');
-                });
-            });
-
-            // Sidebar toggle for mobile
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.querySelector('.md\\:flex');
-            
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('hidden');
-            });
-
-            // Logout handler
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                localStorage.removeItem('adminToken');
-                localStorage.removeItem('adminUser');
-                window.location.href = '../login.html';
-            });
-
-            // Fetch quizzes for the select dropdown
-            fetchQuizzes();
-
-            // Generate access code button
-            document.getElementById('generateCode').addEventListener('click', generateAccessCode);
-
-            // Form submission
-            document.getElementById('createSessionForm').addEventListener('submit', handleSubmit);
+            studentSuggestions.appendChild(li);
         });
+        studentSuggestions.classList.remove('hidden');
+    });
 
-        async function fetchQuizzes() {
-            try {
-                const token = localStorage.getItem('adminToken');
-                const response = await fetch('/api/quizzes', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                if (response.ok) {
-                    const quizzes = await response.json();
-                    const select = document.getElementById('quizSelect');
-                    
-                    quizzes.forEach(quiz => {
-                        const option = document.createElement('option');
-                        option.value = quiz.id;
-                        option.textContent = quiz.title;
-                        select.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching quizzes:', error);
-            }
+    document.addEventListener('click', (e) => {
+        if (!studentSuggestions.contains(e.target) && e.target !== studentSearch) {
+            studentSuggestions.classList.add('hidden');
         }
+    });
 
-        function generateAccessCode() {
-            const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-            document.getElementById('accessCode').value = code;
-        }
-
-        async function handleSubmit(e) {
-            e.preventDefault();
-
-            const formData = new FormData(e.target);
-            const sessionData = {
-                quizId: formData.get('quizId'),
-                name: formData.get('name'),
-                startDate: formData.get('startDate'),
-                startTime: formData.get('startTime'),
-                duration: parseInt(formData.get('duration')),
-                accessCode: formData.get('accessCode')
+    function renderSelectedStudents() {
+        selectedStudentsDiv.innerHTML = '';
+        selectedStudents.forEach(regNum => {
+            const student = allStudents.find(s => s.registration_number === regNum);
+            if (!student) return;
+            const chip = document.createElement('div');
+            chip.className = 'flex items-center bg-gray-100 rounded px-3 py-1 text-sm mb-1';
+            chip.innerHTML = `<span>${student.first_name} ${student.last_name} - ${student.registration_number}</span> <button type="button" class="ml-2 text-red-500 hover:text-red-700 remove-student">Remove</button>`;
+            chip.querySelector('.remove-student').onclick = () => {
+                selectedStudents = selectedStudents.filter(r => r !== regNum);
+                renderSelectedStudents();
             };
+            selectedStudentsDiv.appendChild(chip);
+        });
+    }
 
-            try {
-                const token = localStorage.getItem('adminToken');
-                const response = await fetch('/api/sessions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(sessionData)
-                });
-
-                if (response.ok) {
-                    window.location.href = '/admin/sessions/list.html';
-                } else {
-                    throw new Error('Failed to create session');
-                }
-            } catch (error) {
-                alert('Error creating session: ' + error.message);
-            }
+    createSessionForm.onsubmit = async (e) => {
+        e.preventDefault();
+        sessionError.classList.add('hidden');
+        sessionSuccess.classList.add('hidden');
+        const quiz = quizSelect.value;
+        const number_of_question = parseInt(document.getElementById('numberOfQuestion').value, 10);
+        const start_time = document.getElementById('startTime').value;
+        const end_time = document.getElementById('endTime').value;
+        const students = selectedStudents;
+        if (!quiz || !number_of_question || !start_time || !end_time || students.length === 0) {
+            sessionError.textContent = 'Please fill all fields and select at least one student.';
+            sessionError.classList.remove('hidden');
+            return;
         }
+        // Build payload
+        const payload = {
+            type: 'EXAMINATION',
+            quiz,
+            status: 'NOT_STARTED',
+            start_time: new Date(start_time).toISOString(),
+            end_time: new Date(end_time).toISOString(),
+            students,
+            number_of_question
+        };
+        // Show loading state
+        const submitBtn = createSessionForm.querySelector('button[type="submit"]');
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating...';
+        try {
+            const token = localStorage.getItem('adminToken');
+            const res = await fetch('https://service.verbumdeiportal.com/etest/sessions/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+                sessionSuccess.textContent = 'Session created successfully!';
+                sessionSuccess.classList.remove('hidden');
+                createSessionForm.reset();
+                selectedStudents = [];
+                renderSelectedStudents();
+            } else {
+                const err = await res.json().catch(() => ({}));
+                sessionError.textContent = err.detail || 'Failed to create session.';
+                sessionError.classList.remove('hidden');
+            }
+        } catch (err) {
+            sessionError.textContent = 'Network error. Please try again.';
+            sessionError.classList.remove('hidden');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHTML;
+        }
+    };
+
+    // Fix sidebar dropdowns
+    function initSidebarDropdowns() {
+        document.querySelectorAll('[aria-controls]').forEach(button => {
+            const dropdownId = button.getAttribute('aria-controls');
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+            // Show sessions dropdown by default
+            if (dropdownId === 'sessions-dropdown') {
+                dropdown.classList.remove('hidden');
+            }
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                button.setAttribute('aria-expanded', !isExpanded);
+                dropdown.classList.toggle('hidden');
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        initSidebarDropdowns();
+    });
     </script>
 </body>
 </html> 

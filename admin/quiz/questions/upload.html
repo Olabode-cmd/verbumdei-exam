@@ -110,6 +110,54 @@
             <!-- Upload Form -->
             <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
                 <div class="max-w-3xl mx-auto">
+                    <!-- Upload New Question Section -->
+                    <div class="bg-white shadow-md rounded-lg p-8 mb-8">
+                        <h2 class="text-2xl font-semibold mb-6">Upload New Question</h2>
+                        <form id="newQuestionForm" class="space-y-6">
+                            <div>
+                                <label for="questionText" class="block text-sm font-medium text-gray-700 mb-2">Question Text</label>
+                                <input type="text" 
+                                       id="questionText" 
+                                       name="questionText" 
+                                       required 
+                                       class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                                       placeholder="Enter your question here">
+                            </div>
+
+                            <div>
+                                <label for="quizSelectNew" class="block text-sm font-medium text-gray-700 mb-2">Quiz Name</label>
+                                <select id="quizSelectNew" 
+                                        name="quiz" 
+                                        required 
+                                        class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
+                                    <option value="">Select a quiz</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Answer Options</label>
+                                <div id="optionsContainer" class="space-y-3"></div>
+                                <button type="button" 
+                                        id="addOptionBtn" 
+                                        class="mt-4 px-4 py-2 text-sm bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition duration-150 flex items-center">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Add Another Option
+                                </button>
+                            </div>
+
+                            <div class="pt-4">
+                                <button type="submit" 
+                                        class="w-full sm:w-auto px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-150 flex items-center justify-center">
+                                    <i class="fas fa-cloud-upload-alt mr-2"></i>
+                                    Upload Question
+                                </button>
+                            </div>
+
+                            <div id="questionError" class="mt-4 px-4 py-3 rounded-lg bg-red-50 text-red-600 text-sm hidden"></div>
+                            <div id="questionSuccess" class="mt-4 px-4 py-3 rounded-lg bg-green-50 text-green-600 text-sm hidden"></div>
+                        </form>
+                    </div>
+                    <!-- Existing card section below -->
                     <div class="bg-white shadow-md rounded-lg p-6">
                         <form id="uploadForm">
                             <!-- Quiz Selection -->
@@ -215,12 +263,13 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { fetchQuizzes, uploadQuestion } from '../../../assets/js/quiz.js';
+
         // Handle dropdowns
         document.querySelectorAll('[aria-controls]').forEach(button => {
             const dropdownId = button.getAttribute('aria-controls');
             const dropdown = document.getElementById(dropdownId);
-
             button.addEventListener('click', () => {
                 const isExpanded = button.getAttribute('aria-expanded') === 'true';
                 button.setAttribute('aria-expanded', !isExpanded);
@@ -239,31 +288,33 @@
             window.location.href = '/admin/login.html';
         });
 
-        // Fetch available quizzes
-        async function fetchQuizzes() {
+        // Populate both quiz selects
+        async function populateQuizSelects() {
             try {
-                const token = localStorage.getItem('adminToken');
-                const response = await fetch('/api/quizzes', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                const quizzes = await fetchQuizzes();
+                // For new question form
+                const quizSelectNew = document.getElementById('quizSelectNew');
+                quizSelectNew.innerHTML = '<option value="">Select a quiz</option>';
+                quizzes.forEach(quiz => {
+                    const option = document.createElement('option');
+                    option.value = quiz.id;
+                    option.textContent = quiz.name || quiz.title;
+                    quizSelectNew.appendChild(option);
                 });
-                
-                if (response.ok) {
-                    const quizzes = await response.json();
-                    const select = document.getElementById('quizSelect');
-                    
-                    quizzes.forEach(quiz => {
-                        const option = document.createElement('option');
-                        option.value = quiz.id;
-                        option.textContent = quiz.title;
-                        select.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching quizzes:', error);
+                // For Excel upload form
+                const quizSelect = document.getElementById('quizSelect');
+                quizSelect.innerHTML = '<option value="">Choose a quiz</option>';
+                quizzes.forEach(quiz => {
+                    const option = document.createElement('option');
+                    option.value = quiz.id;
+                    option.textContent = quiz.name || quiz.title;
+                    quizSelect.appendChild(option);
+                });
+            } catch (e) {
+                // Optionally show error
             }
         }
+        document.addEventListener('DOMContentLoaded', populateQuizSelects);
 
         // File upload handling
         const fileUpload = document.getElementById('file-upload');
@@ -326,9 +377,6 @@
             }
         });
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', fetchQuizzes);
-
         // Drag and drop handling
         const dropZone = document.querySelector('.border-dashed');
 
@@ -371,6 +419,124 @@
                 alert('Please upload an Excel file (.xlsx or .xls)');
             }
         }
+
+        // --- New Question Section Logic ---
+        const quizSelectNew = document.getElementById('quizSelectNew');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const addOptionBtn = document.getElementById('addOptionBtn');
+        const newQuestionForm = document.getElementById('newQuestionForm');
+        const questionError = document.getElementById('questionError');
+        const questionSuccess = document.getElementById('questionSuccess');
+
+        let optionCount = 0;
+        let options = [];
+
+        function createOption(text = '', isCorrect = false) {
+            const idx = optionCount++;
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'flex items-center mb-2 gap-2';
+            optionDiv.innerHTML = `
+                <input type="text" class="option-text border rounded px-2 py-1 flex-1" placeholder="Enter option text" value="${text}">
+                <input type="radio" name="correctOption" class="option-correct" ${isCorrect ? 'checked' : ''} title="Mark as Correct Answer">
+                <span class="text-xs">Mark as Correct Answer</span>
+                <button type="button" class="remove-option text-red-500 hover:text-red-700" title="Remove Option"><i class="fas fa-times"></i></button>
+            `;
+            // Remove option
+            optionDiv.querySelector('.remove-option').onclick = () => {
+                optionDiv.remove();
+                updateOptionRadios();
+            };
+            // Only one radio can be checked
+            optionDiv.querySelector('.option-correct').onclick = () => {
+                optionsContainer.querySelectorAll('.option-correct').forEach(radio => {
+                    if (radio !== optionDiv.querySelector('.option-correct')) radio.checked = false;
+                });
+            };
+            optionsContainer.appendChild(optionDiv);
+            updateOptionRadios();
+        }
+        function updateOptionRadios() {
+            // If no radio is checked, check the first one by default
+            const radios = optionsContainer.querySelectorAll('.option-correct');
+            if (radios.length && !Array.from(radios).some(r => r.checked)) {
+                radios[0].checked = true;
+            }
+        }
+        addOptionBtn.onclick = () => createOption();
+        // Add two options by default
+        if (optionsContainer.childElementCount === 0) {
+            createOption();
+            createOption();
+        }
+        // Handle form submit
+        newQuestionForm.onsubmit = async (e) => {
+            e.preventDefault();
+            questionError.classList.add('hidden');
+            questionSuccess.classList.add('hidden');
+            // Gather data
+            const text = document.getElementById('questionText').value.trim();
+            const quizSelectEl = document.getElementById('quizSelectNew');
+            const quiz = quizSelectEl.options[quizSelectEl.selectedIndex]?.text || '';
+            const optionDivs = optionsContainer.querySelectorAll('div');
+            const optionsArr = [];
+            let hasCorrect = false;
+            optionDivs.forEach(div => {
+                const optText = div.querySelector('.option-text').value.trim();
+                const isCorrect = div.querySelector('.option-correct').checked;
+                if (optText) {
+                    optionsArr.push({ text: optText, is_correct: isCorrect });
+                    if (isCorrect) hasCorrect = true;
+                }
+            });
+            if (!text) {
+                questionError.textContent = 'Question text is required.';
+                questionError.classList.remove('hidden');
+                return;
+            }
+            if (!quiz || quiz === 'Select a quiz') {
+                questionError.textContent = 'Please select a quiz.';
+                questionError.classList.remove('hidden');
+                return;
+            }
+            if (optionsArr.length < 2) {
+                questionError.textContent = 'At least two options are required.';
+                questionError.classList.remove('hidden');
+                return;
+            }
+            if (!hasCorrect) {
+                questionError.textContent = 'Please mark one option as correct.';
+                questionError.classList.remove('hidden');
+                return;
+            }
+            // Show loading state
+            const submitBtn = newQuestionForm.querySelector('button[type="submit"]');
+            const originalBtnHTML = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+            // Send to API
+            const dataToSend = { text, quiz, options: optionsArr };
+            console.log('Uploading question:', dataToSend);
+            try {
+                await uploadQuestion(dataToSend);
+                questionSuccess.textContent = 'Question uploaded successfully!';
+                questionSuccess.classList.remove('hidden');
+                newQuestionForm.reset();
+                optionsContainer.innerHTML = '';
+                createOption();
+                createOption();
+            } catch (err) {
+                questionError.textContent = err.message || 'Failed to upload question.';
+                questionError.classList.remove('hidden');
+                if (err && err.body) {
+                    console.log('Error body:', err.body);
+                } else {
+                    console.log('Error:', err);
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHTML;
+            }
+        };
     </script>
 </body>
 </html> 
