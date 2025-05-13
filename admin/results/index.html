@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Verbum Dei Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/globals.css">
+    <script src="../../assets/js/auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/logout.js"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-white border-r">
+                <!-- Sidebar Header -->
+                <div class="flex items-center justify-center h-16 px-4 bg-blue-500">
+                    <h1 class="text-xl font-bold text-white">Verbum Dei</h1>
+                </div>
+
+                <!-- Sidebar Content -->
+                <div class="flex flex-col flex-1 overflow-y-auto">
+                    <nav class="flex-1 px-2 py-4 space-y-1">
+                        <!-- Dashboard -->
+                        <a href="/admin/dashboard/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-home w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Dashboard
+                        </a>
+
+                        <!-- Quiz Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none" aria-controls="quiz-dropdown" aria-expanded="false">
+                                <i class="fas fa-book w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                                <span class="flex-1 text-left">Quiz</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="quiz-dropdown">
+                                <a href="/admin/quiz/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Create Quiz
+                                </a>
+                                <a href="/admin/quiz/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Quizzes
+                                </a>
+                                <a href="/admin/quiz/questions/upload.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Upload Questions
+                                </a>
+                                <a href="/admin/quiz/questions/index.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Questions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Sessions Dropdown -->
+                        <div class="space-y-1">
+                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none" aria-controls="sessions-dropdown" aria-expanded="false">
+                                <i class="fas fa-clock w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                                <span class="flex-1 text-left">Sessions</span>
+                                <i class="fas fa-chevron-down ml-2"></i>
+                            </button>
+                            <div class="space-y-1 pl-11 hidden" id="sessions-dropdown">
+                                <a href="/admin/sessions/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    Create Session
+                                </a>
+                                <a href="/admin/sessions/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
+                                    View Sessions
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <a href="/admin/results/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md group">
+                            <i class="fas fa-chart-bar w-6 h-6 mr-3 text-blue-500"></i>
+                            Results
+                        </a>
+
+                        <!-- Logout -->
+                        <button id="logoutBtn" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
+                            <i class="fas fa-sign-out-alt w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
+                            Logout
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <div class="bg-white shadow">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16 items-center">
+                        <div class="flex items-center">
+                            <button type="button" class="md:hidden px-4 text-gray-500 focus:outline-none" id="sidebarToggle">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                            <h1 class="text-2xl font-bold text-gray-900">Results</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white border-b">
+                <div class="px-4 sm:px-6 lg:px-8 py-4">
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <div class="w-64">
+                            <select id="quizFilter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">All Quizzes</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <input type="text" placeholder="Search by name or registration ID..." id="searchInput" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results List -->
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Error and Success Messages -->
+                    <div id="resultsError" class="mb-4 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 text-sm hidden"></div>
+                    <div id="resultsSuccess" class="mb-4 px-4 py-3 rounded-lg bg-green-50 text-green-600 text-sm hidden"></div>
+
+                    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        S/N
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Session
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Quiz
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Score
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="resultsTable">
+                                <!-- Results will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-4 rounded-md shadow">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <button class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span class="font-medium" id="startRange">1</span> to <span class="font-medium" id="endRange">10</span> of <span class="font-medium" id="totalItems">20</span> results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination" id="pagination">
+                                    <!-- Pagination buttons will be dynamically inserted here -->
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module">
+        // Initialize sidebar
+        function initSidebar() {
+            // Toggle mobile sidebar
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.hidden.md\\:flex');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('hidden');
+                });
+            }
+
+            // Initialize dropdowns
+            document.querySelectorAll('[aria-controls]').forEach(button => {
+                const dropdownId = button.getAttribute('aria-controls');
+                const dropdown = document.getElementById(dropdownId);
+                
+                // Show results dropdown by default
+                if (dropdownId === 'results-dropdown') {
+                    dropdown.classList.remove('hidden');
+                    button.setAttribute('aria-expanded', 'true');
+                }
+
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdown.classList.toggle('hidden');
+                });
+            });
+
+            // Fix navigation URLs
+            document.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('/admin')) {
+                    link.href = href.replace('/admin', '..');
+                }
+            });
+        }
+
+        const resultsTable = document.getElementById("resultsTable");
+        const resultsError = document.getElementById("resultsError");
+        const resultsSuccess = document.getElementById("resultsSuccess");
+        const quizFilter = document.getElementById("quizFilter");
+        const searchInput = document.getElementById("searchInput");
+
+        let allResults = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        async function fetchResults() {
+            try {
+                const token = localStorage.getItem("adminToken");
+                if (!token) {
+                    throw new Error("Not authenticated. Please log in again.");
+                }
+
+                const res = await fetch(
+                    "https://service.verbumdeiportal.com/etest/results/",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        throw new Error("Session expired. Please log in again.");
+                    }
+                    throw new Error("Failed to fetch results.");
+                }
+
+                allResults = await res.json();
+                updateFilters();
+                renderResults();
+            } catch (err) {
+                resultsError.textContent = err.message;
+                resultsError.classList.remove("hidden");
+            }
+        }
+
+        function updateFilters() {
+            // Update quiz filter options
+            const quizzes = [...new Set(allResults.map(result => result.quiz))];
+            quizFilter.innerHTML = '<option value="">All Quizzes</option>' + 
+                quizzes.map(quiz => `<option value="${quiz}">${quiz}</option>`).join('');
+        }
+
+        function getFilteredResults() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedQuiz = quizFilter.value;
+
+            return allResults.filter(result => {
+                const matchesSearch = result.student_name.toLowerCase().includes(searchTerm) ||
+                                    result.registration_id.toLowerCase().includes(searchTerm);
+                const matchesQuiz = !selectedQuiz || result.quiz === selectedQuiz;
+                return matchesSearch && matchesQuiz;
+            });
+        }
+
+        function renderResults() {
+            const filteredResults = getFilteredResults();
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedResults = filteredResults.slice(startIndex, endIndex);
+
+            resultsTable.innerHTML = paginatedResults
+                .map(
+                    (result, index) => `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${startIndex + index + 1}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">${result.student_name}</div>
+                                <div class="text-sm text-gray-500">${result.registration_id}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${result.session_code}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${result.quiz}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                ${result.score}/100
+                            </td>
+                        </tr>
+                    `
+                )
+                .join("");
+
+            updatePagination(filteredResults.length);
+        }
+
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            // Update range text
+            const startRange = document.getElementById('startRange');
+            const endRange = document.getElementById('endRange');
+            const totalItemsElement = document.getElementById('totalItems');
+            
+            startRange.textContent = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+            endRange.textContent = Math.min(currentPage * itemsPerPage, totalItems);
+            totalItemsElement.textContent = totalItems;
+
+            // Generate pagination buttons
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <button
+                    onclick="changePage(${currentPage - 1})"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    ${currentPage === 1 ? 'disabled' : ''}
+                >
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <button
+                        onclick="changePage(${i})"
+                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
+                            i === currentPage ? 'text-blue-500 bg-blue-50' : 'text-gray-700'
+                        } hover:bg-gray-50"
+                    >
+                        ${i}
+                    </button>
+                `;
+            }
+
+            // Next button
+            paginationHTML += `
+                <button
+                    onclick="changePage(${currentPage + 1})"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    ${currentPage === totalPages ? 'disabled' : ''}
+                >
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        // Make functions globally available
+        window.changePage = function (page) {
+            if (page < 1 || page > Math.ceil(getFilteredResults().length / itemsPerPage)) return;
+            currentPage = page;
+            renderResults();
+        };
+
+        // Add event listeners for filters
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            renderResults();
+        });
+
+        quizFilter.addEventListener('change', () => {
+            currentPage = 1;
+            renderResults();
+        });
+
+        // Initialize when DOM is ready
+        $(document).ready(function() {
+            initSidebar();
+            fetchResults();
+        });
+    </script>
+</body>
+</html> 

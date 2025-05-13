@@ -7,6 +7,7 @@ export async function fetchStudents() {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.detail || 'Failed to fetch students');
     }
-    console.log(res.json());
-    return res.json();
+    const data = await res.json();
+    // console.log('Students fetched:', data);
+    return data;
 }

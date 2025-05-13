@@ -16,6 +16,7 @@ const AUTHORIZED_ROLES = ['HEAD TEACHER', 'TEACHER', 'SECRETARY'];
 function isAuthorizedRole(role) {
     return AUTHORIZED_ROLES.includes(role);
 }
+ 
 
 // Regular authentication login
 async function login(credentials) {

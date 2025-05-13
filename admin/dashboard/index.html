@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/globals.css">
     <script src="../../assets/js/auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../assets/js/logout.js"></script>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
@@ -85,7 +87,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Navigation -->
             <div class="bg-white shadow">
                 <div class="px-4 sm:px-6 lg:px-8">
@@ -103,149 +105,54 @@
                 </div>
             </div>
 
-            <!-- Page Content -->
+            <!-- Dashboard Content -->
             <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
-                <!-- Stats Cards -->
-                <!-- <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                    <div class="bg-white overflow-hidden shadow rounded-lg">
-                        <div class="p-5">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-users text-blue-500 text-3xl"></i>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">
-                                            Total Students
-                                        </dt>
-                                        <dd class="text-3xl font-semibold text-gray-900">
-                                            1,234
-                                        </dd>
-                                    </dl>
-                                </div>
+                <div class="max-w-7xl mx-auto">
+                    <!-- Welcome Section -->
+                    <div class="bg-white shadow-lg rounded-lg p-8 mb-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Verbum Dei Exam Portal</h2>
+                        <p class="text-gray-600 text-lg">Manage your examinations, create quizzes, and track student results all in one place.</p>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Create Quiz -->
+                        <a href="../quiz/create.html" class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+                                <i class="fas fa-plus text-xl"></i>
                             </div>
-                        </div>
-                    </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Create Quiz</h3>
+                            <p class="text-gray-600">Create a new quiz with custom settings and questions.</p>
+                        </a>
 
-                    <div class="bg-white overflow-hidden shadow rounded-lg">
-                        <div class="p-5">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-book text-blue-500 text-3xl"></i>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">
-                                            Active Exams
-                                        </dt>
-                                        <dd class="text-3xl font-semibold text-gray-900">
-                                            12
-                                        </dd>
-                                    </dl>
-                                </div>
+                        <!-- Create Session -->
+                        <a href="../sessions/create.html" class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4">
+                                <i class="fas fa-clock text-xl"></i>
                             </div>
-                        </div>
-                    </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Create Session</h3>
+                            <p class="text-gray-600">Schedule a new examination session for students.</p>
+                        </a>
 
-                    <div class="bg-white overflow-hidden shadow rounded-lg">
-                        <div class="p-5">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-clock text-blue-500 text-3xl"></i>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">
-                                            Ongoing Sessions
-                                        </dt>
-                                        <dd class="text-3xl font-semibold text-gray-900">
-                                            45
-                                        </dd>
-                                    </dl>
-                                </div>
+                        <!-- Upload Questions -->
+                        <a href="../quiz/questions/upload.html" class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white mb-4">
+                                <i class="fas fa-upload text-xl"></i>
                             </div>
-                        </div>
-                    </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Questions</h3>
+                            <p class="text-gray-600">Upload questions for your quizzes in bulk.</p>
+                        </a>
 
-                    <div class="bg-white overflow-hidden shadow rounded-lg">
-                        <div class="p-5">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-check-circle text-blue-500 text-3xl"></i>
-                                </div>
-                                <div class="ml-5 w-0 flex-1">
-                                    <dl>
-                                        <dt class="text-sm font-medium text-gray-500 truncate">
-                                            Completed Exams
-                                        </dt>
-                                        <dd class="text-3xl font-semibold text-gray-900">
-                                            789
-                                        </dd>
-                                    </dl>
-                                </div>
+                        <!-- View Results -->
+                        <a href="../results/index.html" class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white mb-4">
+                                <i class="fas fa-chart-bar text-xl"></i>
                             </div>
-                        </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">View Results</h3>
+                            <p class="text-gray-600">Check and analyze student examination results.</p>
+                        </a>
                     </div>
-                </div> -->
-
-                <!-- Quick Actions -->
-                <!-- <div class="mt-8">
-                    <h2 class="text-lg font-medium text-gray-900">Quick Actions</h2>
-                    <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        <button class="quick-action bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200" data-action="create-quiz">
-                            <i class="fas fa-plus-circle text-blue-500 text-2xl mb-4"></i>
-                            <h3 class="text-lg font-medium text-gray-900">Create New Quiz</h3>
-                            <p class="mt-2 text-sm text-gray-500">Set up a new quiz</p>
-                        </button>
-
-                        <button class="quick-action bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200" data-action="create-session">
-                            <i class="fas fa-clock text-blue-500 text-2xl mb-4"></i>
-                            <h3 class="text-lg font-medium text-gray-900">Create Session</h3>
-                            <p class="mt-2 text-sm text-gray-500">Schedule a new exam session</p>
-                        </button>
-
-                        <button class="quick-action bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200" data-action="view-reports">
-                            <i class="fas fa-chart-bar text-blue-500 text-2xl mb-4"></i>
-                            <h3 class="text-lg font-medium text-gray-900">View Reports</h3>
-                            <p class="mt-2 text-sm text-gray-500">Access examination analytics</p>
-                        </button>
-                    </div>
-                </div> -->
-
-                <!-- Recent Activity -->
-                <!-- <div class="mt-8">
-                    <h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
-                    <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-md">
-                        <ul class="divide-y divide-gray-200">
-                            <li class="px-6 py-4 hover:bg-gray-50">
-                                <div class="flex items-center">
-                                    <div class="min-w-0 flex-1">
-                                        <p class="text-sm font-medium text-gray-900">Mathematics Final Exam</p>
-                                        <p class="text-sm text-gray-500">Started 10 minutes ago • 45 students</p>
-                                    </div>
-                                    <div>
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="px-6 py-4 hover:bg-gray-50">
-                                <div class="flex items-center">
-                                    <div class="min-w-0 flex-1">
-                                        <p class="text-sm font-medium text-gray-900">Science Quiz</p>
-                                        <p class="text-sm text-gray-500">Completed 1 hour ago • 32 students</p>
-                                    </div>
-                                    <div>
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                            Completed
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div> -->
+                </div>
             </main>
         </div>
     </div>

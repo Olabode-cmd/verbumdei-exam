@@ -1,328 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Session - Verbum Dei Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../../assets/css/globals.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    />
+    <link rel="stylesheet" href="../../assets/css/globals.css" />
     <script src="../../assets/js/auth.js"></script>
-</head>
-<body class="bg-gray-50">
+    <script src="../../assets/js/logout.js"></script>
+  </head>
+  <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-white border-r">
-                <!-- Sidebar Header -->
-                <div class="flex items-center justify-center h-16 px-4 bg-blue-500">
-                    <h1 class="text-xl font-bold text-white">Verbum Dei</h1>
+      <!-- Sidebar -->
+      <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-white border-r">
+          <!-- Sidebar Header -->
+          <div class="flex items-center justify-center h-16 px-4 bg-blue-500">
+            <h1 class="text-xl font-bold text-white">Verbum Dei</h1>
+          </div>
+
+          <!-- Sidebar Content -->
+          <div class="flex flex-col flex-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 space-y-1">
+              <!-- Dashboard -->
+              <a
+                href="/admin/dashboard/index.html"
+                class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group"
+              >
+                <i
+                  class="fas fa-home w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"
+                ></i>
+                Dashboard
+              </a>
+
+              <!-- Quiz Dropdown -->
+              <div class="space-y-1">
+                <button
+                  type="button"
+                  class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none"
+                  aria-controls="quiz-dropdown"
+                  aria-expanded="false"
+                >
+                  <i
+                    class="fas fa-book w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"
+                  ></i>
+                  <span class="flex-1 text-left">Quiz</span>
+                  <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+                <div class="space-y-1 pl-11 hidden" id="quiz-dropdown">
+                  <a
+                    href="/admin/quiz/create.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500"
+                  >
+                    Create Quiz
+                  </a>
+                  <a
+                    href="/admin/quiz/list.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500"
+                  >
+                    View Quizzes
+                  </a>
+                  <a
+                    href="/admin/quiz/questions/upload.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500"
+                  >
+                    Upload Questions
+                  </a>
+                  <a
+                    href="/admin/quiz/questions/index.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500"
+                  >
+                    View Questions
+                  </a>
                 </div>
+              </div>
 
-                <!-- Sidebar Content -->
-                <div class="flex flex-col flex-1 overflow-y-auto">
-                    <nav class="flex-1 px-2 py-4 space-y-1">
-                        <!-- Dashboard -->
-                        <a href="/admin/dashboard/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
-                            <i class="fas fa-home w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
-                            Dashboard
-                        </a>
-
-                        <!-- Quiz Dropdown -->
-                        <div class="space-y-1">
-                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group focus:outline-none" aria-controls="quiz-dropdown" aria-expanded="false">
-                                <i class="fas fa-book w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
-                                <span class="flex-1 text-left">Quiz</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div class="space-y-1 pl-11 hidden" id="quiz-dropdown">
-                                <a href="/admin/quiz/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
-                                    Create Quiz
-                                </a>
-                                <a href="/admin/quiz/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
-                                    View Quizzes
-                                </a>
-                                <a href="/admin/quiz/questions/upload.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
-                                    Upload Questions
-                                </a>
-                                <a href="/admin/quiz/questions/index.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
-                                    View Questions
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Sessions Dropdown -->
-                        <div class="space-y-1">
-                            <button type="button" class="flex items-center w-full px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md group focus:outline-none" aria-controls="sessions-dropdown" aria-expanded="false">
-                                <i class="fas fa-clock w-6 h-6 mr-3 text-blue-500"></i>
-                                <span class="flex-1 text-left">Sessions</span>
-                                <i class="fas fa-chevron-down ml-2"></i>
-                            </button>
-                            <div class="space-y-1 pl-11 hidden" id="sessions-dropdown">
-                                <a href="/admin/sessions/create.html" class="group flex items-center px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md">
-                                    Create Session
-                                </a>
-                                <a href="/admin/sessions/list.html" class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500">
-                                    View Sessions
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Results -->
-                        <a href="/admin/results/index.html" class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
-                            <i class="fas fa-chart-bar w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
-                            Results
-                        </a>
-
-                        <!-- Logout -->
-                        <button id="logoutBtn" class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group">
-                            <i class="fas fa-sign-out-alt w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"></i>
-                            Logout
-                        </button>
-                    </nav>
+              <!-- Sessions Dropdown -->
+              <div class="space-y-1">
+                <button
+                  type="button"
+                  class="flex items-center w-full px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md group focus:outline-none"
+                  aria-controls="sessions-dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-clock w-6 h-6 mr-3 text-blue-500"></i>
+                  <span class="flex-1 text-left">Sessions</span>
+                  <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+                <div class="space-y-1 pl-11 hidden" id="sessions-dropdown">
+                  <a
+                    href="/admin/sessions/create.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-blue-500 bg-blue-50 rounded-md"
+                  >
+                    Create Session
+                  </a>
+                  <a
+                    href="/admin/sessions/list.html"
+                    class="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500"
+                  >
+                    View Sessions
+                  </a>
                 </div>
+              </div>
+
+              <!-- Results -->
+              <a
+                href="/admin/results/index.html"
+                class="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group"
+              >
+                <i
+                  class="fas fa-chart-bar w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"
+                ></i>
+                Results
+              </a>
+
+              <!-- Logout -->
+              <button
+                id="logoutBtn"
+                class="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-blue-500 group"
+              >
+                <i
+                  class="fas fa-sign-out-alt w-6 h-6 mr-3 text-gray-400 group-hover:text-blue-500"
+                ></i>
+                Logout
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <div class="bg-white shadow">
+          <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+              <div class="flex items-center">
+                <button
+                  type="button"
+                  class="md:hidden px-4 text-gray-500 focus:outline-none"
+                  id="sidebarToggle"
+                >
+                  <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-2xl font-bold text-gray-900">Create Session</h1>
+              </div>
+              <div>
+                <a
+                  href="/admin/sessions/list.html"
+                  class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600"
+                >
+                  <i class="fas fa-list mr-2"></i>
+                  View Sessions
+                </a>
+              </div>
             </div>
+          </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top Navigation -->
-            <div class="bg-white shadow">
-                <div class="px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16 items-center">
-                        <div class="flex items-center">
-                            <button type="button" class="md:hidden px-4 text-gray-500 focus:outline-none" id="sidebarToggle">
-                                <i class="fas fa-bars text-xl"></i>
-                            </button>
-                            <h1 class="text-2xl font-bold text-gray-900">Create Session</h1>
-                        </div>
-                        <div>
-                            <a href="/admin/sessions/list.html" 
-                               class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600">
-                                <i class="fas fa-list mr-2"></i>
-                                View Sessions
-                            </a>
-                        </div>
-                    </div>
+        <!-- Create Session Form -->
+        <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
+          <div class="max-w-2xl mx-auto">
+            <div class="bg-white shadow-lg rounded-lg p-0">
+              <div class="bg-blue-600 rounded-t-lg py-4 text-center">
+                <h2 class="text-2xl font-bold text-white">
+                  Create New Session
+                </h2>
+              </div>
+              <form id="createSessionForm" class="p-8 space-y-6">
+                <div>
+                  <label
+                    for="quizSelect"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Quiz Name</label
+                  >
+                  <select
+                    id="quizSelect"
+                    name="quiz"
+                    required
+                    class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                  >
+                    <option value="">Select Quiz</option>
+                  </select>
                 </div>
+                <div>
+                  <label
+                    for="numberOfQuestion"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Number of Question</label
+                  >
+                  <input
+                    type="number"
+                    id="numberOfQuestion"
+                    name="number_of_question"
+                    required
+                    min="1"
+                    class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                    placeholder="Enter number of questions"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="startTime"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Start Time</label
+                  >
+                  <input
+                    type="datetime-local"
+                    id="startTime"
+                    name="start_time"
+                    required
+                    class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="endTime"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >End Time</label
+                  >
+                  <input
+                    type="datetime-local"
+                    id="endTime"
+                    name="end_time"
+                    required
+                    class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="studentSelect"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Select Candidates</label
+                  >
+                  <div class="relative">
+                    <select
+                      id="studentSelect"
+                      multiple
+                      class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150"
+                    >
+                      <option value="">Search students...</option>
+                    </select>
+                    <div
+                      id="studentLoading"
+                      class="absolute right-3 top-1/2 -translate-y-1/2 hidden"
+                    >
+                      <i class="fas fa-spinner fa-spin text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  id="selectedStudentsGrid"
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4"
+                ></div>
+                <div>
+                  <button
+                    type="submit"
+                    class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 font-semibold"
+                  >
+                    Create
+                  </button>
+                </div>
+                <div
+                  id="sessionError"
+                  class="mt-4 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 text-sm hidden"
+                ></div>
+                <div
+                  id="sessionSuccess"
+                  class="mt-4 px-4 py-3 rounded-lg bg-green-50 text-green-600 text-sm hidden"
+                ></div>
+              </form>
             </div>
-
-            <!-- Create Session Form -->
-            <main class="flex-1 overflow-y-auto bg-gray-50 p-4">
-                <div class="max-w-xl mx-auto">
-                    <div class="bg-white shadow-lg rounded-lg p-0">
-                        <div class="bg-blue-600 rounded-t-lg py-4 text-center">
-                            <h2 class="text-2xl font-bold text-white">Create New Session</h2>
-                        </div>
-                        <form id="createSessionForm" class="p-8 space-y-6">
-                            <div>
-                                <label for="quizSelect" class="block text-sm font-medium text-gray-700 mb-2">Quiz Name</label>
-                                <select id="quizSelect" name="quiz" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
-                                    <option value="">Select Quiz</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="numberOfQuestion" class="block text-sm font-medium text-gray-700 mb-2">Number of Question</label>
-                                <input type="number" id="numberOfQuestion" name="number_of_question" required min="1" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150" placeholder="Enter number of questions">
-                            </div>
-                            <div>
-                                <label for="startTime" class="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
-                                <input type="datetime-local" id="startTime" name="start_time" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
-                            </div>
-                            <div>
-                                <label for="endTime" class="block text-sm font-medium text-gray-700 mb-2">End Time</label>
-                                <input type="datetime-local" id="endTime" name="end_time" required class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
-                            </div>
-                            <div>
-                                <label for="studentSearch" class="block text-sm font-medium text-gray-700 mb-2">Search Candidate by Registration Number</label>
-                                <input type="text" id="studentSearch" autocomplete="off" placeholder="Enter registration number" class="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150">
-                                <ul id="studentSuggestions" class="bg-white border border-gray-200 rounded-lg mt-1 max-h-40 overflow-y-auto hidden z-10"></ul>
-                            </div>
-                            <div id="selectedStudents" class="flex flex-wrap gap-2 mt-2"></div>
-                            <div>
-                                <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 font-semibold">Create</button>
-                            </div>
-                            <div id="sessionError" class="mt-4 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 text-sm hidden"></div>
-                            <div id="sessionSuccess" class="mt-4 px-4 py-3 rounded-lg bg-green-50 text-green-600 text-sm hidden"></div>
-                        </form>
-                    </div>
-                </div>
-            </main>
-        </div>
+          </div>
+        </main>
+      </div>
     </div>
 
     <script type="module">
-    import { fetchQuizzes } from '../../assets/js/quiz.js';
-    import { fetchStudents } from '../../assets/js/students.js';
+      import { fetchQuizzes } from "../../assets/js/quiz.js";
+      import { fetchStudents } from "../../assets/js/students.js";
 
-    const quizSelect = document.getElementById('quizSelect');
-    const studentSearch = document.getElementById('studentSearch');
-    const studentSuggestions = document.getElementById('studentSuggestions');
-    const selectedStudentsDiv = document.getElementById('selectedStudents');
-    const createSessionForm = document.getElementById('createSessionForm');
-    const sessionError = document.getElementById('sessionError');
-    const sessionSuccess = document.getElementById('sessionSuccess');
+      const quizSelect = document.getElementById("quizSelect");
+      const studentSelect = document.getElementById("studentSelect");
+      const selectedStudentsGrid = document.getElementById(
+        "selectedStudentsGrid"
+      );
+      const createSessionForm = document.getElementById("createSessionForm");
+      const sessionError = document.getElementById("sessionError");
+      const sessionSuccess = document.getElementById("sessionSuccess");
+      const studentLoading = document.getElementById("studentLoading");
 
-    let allStudents = [];
-    let selectedStudents = [];
+      let allStudents = [];
+      let selectedStudents = new Set();
 
-    // Fetch quizzes for select
-    async function populateQuizSelect() {
-        try {
-            const quizzes = await fetchQuizzes();
-            quizSelect.innerHTML = '<option value="">Select Quiz</option>';
-            quizzes.forEach(quiz => {
-                const option = document.createElement('option');
-                option.value = quiz.name || quiz.title;
-                option.textContent = quiz.name || quiz.title;
-                quizSelect.appendChild(option);
-            });
-        } catch (e) { /* Optionally show error */ }
-    }
-    populateQuizSelect();
-
-    // Fetch all students
-    async function loadStudents() {
-        try {
-            allStudents = await fetchStudents();
-        } catch (e) { /* Optionally show error */ }
-    }
-    loadStudents();
-
-    // Search and suggest students
-    studentSearch.addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase();
-        studentSuggestions.innerHTML = '';
-        if (!query) {
-            studentSuggestions.classList.add('hidden');
-            return;
-        }
-        const matches = allStudents.filter(s =>
-            s.registration_number && s.registration_number.toLowerCase().includes(query)
-        ).slice(0, 10);
-        if (matches.length === 0) {
-            studentSuggestions.classList.add('hidden');
-            return;
-        }
-        matches.forEach(student => {
-            const li = document.createElement('li');
-            li.className = 'px-4 py-2 cursor-pointer hover:bg-blue-50';
-            li.textContent = `${student.first_name} ${student.last_name} - ${student.registration_number}`;
-            li.addEventListener('click', () => {
-                if (!selectedStudents.includes(student.registration_number)) {
-                    selectedStudents.push(student.registration_number);
-                    renderSelectedStudents();
-                }
-                studentSearch.value = '';
-                studentSuggestions.classList.add('hidden');
-            });
-            studentSuggestions.appendChild(li);
+      // Initialize Select2
+      $(document).ready(function () {
+        $("#studentSelect").select2({
+          placeholder: "Search students...",
+          allowClear: true,
+          width: "100%",
+          templateResult: formatStudentOption,
+          templateSelection: function () {
+            return "Search students...";
+          },
+          dropdownCssClass: "select2-dropdown-below",
+          closeOnSelect: false,
         });
-        studentSuggestions.classList.remove('hidden');
-    });
 
-    document.addEventListener('click', (e) => {
-        if (!studentSuggestions.contains(e.target) && e.target !== studentSearch) {
-            studentSuggestions.classList.add('hidden');
-        }
-    });
-
-    function renderSelectedStudents() {
-        selectedStudentsDiv.innerHTML = '';
-        selectedStudents.forEach(regNum => {
-            const student = allStudents.find(s => s.registration_number === regNum);
-            if (!student) return;
-            const chip = document.createElement('div');
-            chip.className = 'flex items-center bg-gray-100 rounded px-3 py-1 text-sm mb-1';
-            chip.innerHTML = `<span>${student.first_name} ${student.last_name} - ${student.registration_number}</span> <button type="button" class="ml-2 text-red-500 hover:text-red-700 remove-student">Remove</button>`;
-            chip.querySelector('.remove-student').onclick = () => {
-                selectedStudents = selectedStudents.filter(r => r !== regNum);
-                renderSelectedStudents();
-            };
-            selectedStudentsDiv.appendChild(chip);
+        // Hide the selection boxes
+        $(".select2-selection__choice").hide();
+        $("#studentSelect").on("select2:select", function () {
+          $(".select2-selection__choice").hide();
         });
-    }
 
-    createSessionForm.onsubmit = async (e) => {
+        // Handle selection changes
+        $("#studentSelect").on("change", function (e) {
+          const selectedIds = $(this).val() || [];
+          selectedStudents = new Set(selectedIds);
+          renderSelectedStudents();
+        });
+      });
+
+      function formatStudentOption(student) {
+        if (!student.id) return student.text;
+        const studentData = allStudents.find(
+          (s) => s.id === parseInt(student.id)
+        );
+        if (!studentData) return student.text;
+        return $(
+          `<span>${studentData.registration_id} (${studentData.first_name} ${studentData.last_name})</span>`
+        );
+      }
+
+      // Fetch quizzes for select
+      async function populateQuizSelect() {
+        try {
+          const quizzes = await fetchQuizzes();
+          quizSelect.innerHTML = '<option value="">Select Quiz</option>';
+          quizzes.forEach((quiz) => {
+            const option = document.createElement("option");
+            option.value = quiz.name || quiz.title;
+            option.textContent = quiz.name || quiz.title;
+            quizSelect.appendChild(option);
+          });
+        } catch (e) {
+          /* Optionally show error */
+        }
+      }
+      populateQuizSelect();
+
+      async function loadStudents() {
+        try {
+          studentLoading.classList.remove("hidden");
+          allStudents = await fetchStudents();
+          populateStudentSelect();
+        } catch (e) {
+          sessionError.textContent =
+            "Failed to load students. Please refresh the page.";
+          sessionError.classList.remove("hidden");
+        } finally {
+          studentLoading.classList.add("hidden");
+        }
+      }
+
+      function populateStudentSelect() {
+        studentSelect.innerHTML =
+          '<option value="">Search students...</option>';
+        allStudents.forEach((student) => {
+          const option = document.createElement("option");
+          option.value = student.id;
+          option.textContent = `${student.registration_id} (${student.first_name} ${student.last_name})`;
+          studentSelect.appendChild(option);
+        });
+      }
+
+      function renderSelectedStudents() {
+        selectedStudentsGrid.innerHTML = "";
+        selectedStudents.forEach((studentId) => {
+          const student = allStudents.find((s) => s.id === parseInt(studentId));
+          if (!student) return;
+
+          const studentCard = document.createElement("div");
+          studentCard.className =
+            "bg-white p-3 rounded-lg shadow border border-gray-200 flex items-center justify-between";
+          studentCard.innerHTML = `
+                <div>
+                    <div class="font-semibold text-gray-800">${student.first_name} ${student.last_name}</div>
+                    <div class="text-sm text-gray-600">${student.registration_id}</div>
+                </div>
+                <button type="button" class="text-red-500 hover:text-red-700" onclick="removeStudent(${student.id})">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+          selectedStudentsGrid.appendChild(studentCard);
+        });
+      }
+
+      // Make removeStudent function globally available
+      window.removeStudent = function (studentId) {
+        selectedStudents.delete(studentId.toString());
+        $("#studentSelect").val(Array.from(selectedStudents)).trigger("change");
+      };
+
+      // Load students when page loads
+      loadStudents();
+
+      // Handle form submission
+      createSessionForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        sessionError.classList.add('hidden');
-        sessionSuccess.classList.add('hidden');
+        sessionError.classList.add("hidden");
+        sessionSuccess.classList.add("hidden");
+
+        // Get form values
         const quiz = quizSelect.value;
-        const number_of_question = parseInt(document.getElementById('numberOfQuestion').value, 10);
-        const start_time = document.getElementById('startTime').value;
-        const end_time = document.getElementById('endTime').value;
-        const students = selectedStudents;
-        if (!quiz || !number_of_question || !start_time || !end_time || students.length === 0) {
-            sessionError.textContent = 'Please fill all fields and select at least one student.';
-            sessionError.classList.remove('hidden');
-            return;
+        const number_of_question = parseInt(
+          document.getElementById("numberOfQuestion").value,
+          10
+        );
+        const start_time = document.getElementById("startTime").value;
+        const end_time = document.getElementById("endTime").value;
+        
+        // Get registration IDs instead of database IDs
+        const students = Array.from(selectedStudents).map(id => {
+          const student = allStudents.find(s => s.id === parseInt(id));
+          return student ? student.registration_id : null;
+        }).filter(id => id !== null);
+
+        // Validate form
+        if (
+          !quiz ||
+          !number_of_question ||
+          !start_time ||
+          !end_time ||
+          students.length === 0
+        ) {
+          sessionError.textContent =
+            "Please fill all fields and select at least one student.";
+          sessionError.classList.remove("hidden");
+          return;
         }
+
+        // Validate number of questions
+        if (number_of_question > 2147483647) {
+          sessionError.textContent = "Number of questions exceeds maximum limit.";
+          sessionError.classList.remove("hidden");
+          return;
+        }
+
         // Build payload
         const payload = {
-            type: 'EXAMINATION',
-            quiz,
-            status: 'NOT_STARTED',
-            start_time: new Date(start_time).toISOString(),
-            end_time: new Date(end_time).toISOString(),
-            students,
-            number_of_question
+          type: "EXAMINATION",
+          quiz,
+          start_time: new Date(start_time).toISOString(),
+          end_time: new Date(end_time).toISOString(),
+          students,
+          number_of_question
         };
+
         // Show loading state
         const submitBtn = createSessionForm.querySelector('button[type="submit"]');
         const originalBtnHTML = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating...';
-        try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch('https://service.verbumdeiportal.com/etest/sessions/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-            if (res.ok) {
-                sessionSuccess.textContent = 'Session created successfully!';
-                sessionSuccess.classList.remove('hidden');
-                createSessionForm.reset();
-                selectedStudents = [];
-                renderSelectedStudents();
-            } else {
-                const err = await res.json().catch(() => ({}));
-                sessionError.textContent = err.detail || 'Failed to create session.';
-                sessionError.classList.remove('hidden');
-            }
-        } catch (err) {
-            sessionError.textContent = 'Network error. Please try again.';
-            sessionError.classList.remove('hidden');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnHTML;
-        }
-    };
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Session...';
 
-    // Fix sidebar dropdowns
-    function initSidebarDropdowns() {
-        document.querySelectorAll('[aria-controls]').forEach(button => {
-            const dropdownId = button.getAttribute('aria-controls');
-            const dropdown = document.getElementById(dropdownId);
-            if (!dropdown) return;
-            // Show sessions dropdown by default
-            if (dropdownId === 'sessions-dropdown') {
-                dropdown.classList.remove('hidden');
+        try {
+          const token = localStorage.getItem("adminToken");
+          if (!token) {
+            throw new Error("Not authenticated. Please log in again.");
+          }
+
+          console.log(payload);
+
+          const res = await fetch(
+            "https://service.verbumdeiportal.com/etest/sessions/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(payload),
             }
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                button.setAttribute('aria-expanded', !isExpanded);
-                dropdown.classList.toggle('hidden');
-            });
+          );
+
+          const data = await res.json();
+
+          if (res.ok) {
+            sessionSuccess.textContent = "Session created successfully!";
+            sessionSuccess.classList.remove("hidden");
+            createSessionForm.reset();
+            selectedStudents = new Set();
+            renderSelectedStudents();
+          } else {
+            // Handle specific error cases
+            if (res.status === 401) {
+              throw new Error("Session expired. Please log in again.");
+            } else if (res.status === 400) {
+              const errorMessage = data.detail || Object.values(data).join(", ");
+              throw new Error(errorMessage);
+            } else {
+              throw new Error(data.detail || "Failed to create session. Please try again.");
+            }
+          }
+        } catch (err) {
+          sessionError.textContent = err.message || "Network error. Please try again.";
+          sessionError.classList.remove("hidden");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHTML;
+        }
+      });
+
+      // Fix sidebar dropdowns
+      function initSidebarDropdowns() {
+        document.querySelectorAll("[aria-controls]").forEach((button) => {
+          const dropdownId = button.getAttribute("aria-controls");
+          const dropdown = document.getElementById(dropdownId);
+          if (!dropdown) return;
+          // Show sessions dropdown by default
+          if (dropdownId === "sessions-dropdown") {
+            dropdown.classList.remove("hidden");
+          }
+          button.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const isExpanded = button.getAttribute("aria-expanded") === "true";
+            button.setAttribute("aria-expanded", !isExpanded);
+            dropdown.classList.toggle("hidden");
+          });
         });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
+      }
+      document.addEventListener("DOMContentLoaded", function () {
         initSidebarDropdowns();
-    });
+      });
     </script>
-</body>
-</html> 
+  </body>
+</html>
